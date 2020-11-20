@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,10 +79,28 @@ WSGI_APPLICATION = 'bookingSystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ymjsbsgq',
+        'USER': 'ymjsbsgq' ,
+        'PASSWORD': 'GmGNKxKE5ljnpJGcbBBvBHiruZRH9UfG',
+        'HOST': 'rajje.db.elephantsql.com',
+        'PORT': '5432'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         "CLIENT": {
+#            "name": 'BookingSystem',
+#            "host": 'mongodb+srv://BookingSystem:<password>@cluster0.1ebnn.mongodb.net/<dbname>?retryWrites=true&w=majority',
+#            "username": 'BookingSystem',
+#            "password": 'BookingSystem',
+#            "authMechanism": "SCRAM-SHA-1",
+#         }, 
+#     }
+# }
+
 
 
 # Password validation
@@ -121,3 +140,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+django_heroku.settings(locals())
