@@ -26,37 +26,37 @@ class UserManager(BaseUserManager):
             **extra_fields
         )
         user_obj.set_password(password)
-        user_obj.staff = is_staff
+        user_obj.staff = is_staff       
         user_obj.admin = is_admin
         user_obj.is_active = is_active
         user_obj.save(using = self._db)
         return user_obj
 
 
-        def create_user(self, email, password, **extra_fields):
-            user = self._create_user(
-                email,
-                password = password,
-                **extra_fields
-            )
-            user.is_superuser = False
-            user.save(using=self._db)
-            return user
+    def create_user(self, email, password, **extra_fields):
+        user = self._create_user(
+            email,
+            password = password,
+            **extra_fields
+        )
+        user.is_superuser = False
+        user.save(using=self._db)
+        return user
 
-            #create super user 
-            
-        def create_superuser(self, email, passowrd, first_name = None, last_name = None , **extra_fields):
-            user = self._create_user(
-                email,
-                password = password,
-                **extra_fields
-            )    
-            user.is_superuser = True
-            user.is_admin = True
-            user.is_staff = True
-            user.is_active = True
-            user.save(using = self._db)
-            return user
+        #create super user 
+        
+    def create_superuser(self, email, passowrd, first_name = None, last_name = None , **extra_fields):
+        user = self._create_user(
+            email,
+            password = password,
+            **extra_fields
+        )    
+        user.is_superuser = True
+        user.is_admin = True
+        user.is_staff = True
+        user.is_active = True
+        user.save(using = self._db)
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
