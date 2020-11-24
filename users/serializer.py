@@ -7,6 +7,7 @@ class TokenSerializer(serializers.Serializer):
     """  
     serializer for token data
     """
+    # token = serializers.CharField(max_length = 255,  read_only=True)
     token = serializers.CharField(max_length = 255)
 
 

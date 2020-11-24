@@ -45,7 +45,7 @@ class UserManager(BaseUserManager):
 
         #create super user 
         
-    def create_superuser(self, email, passowrd, first_name = None, last_name = None , **extra_fields):
+    def create_superuser(self, email, password, first_name = None, last_name = None , **extra_fields):
         user = self._create_user(
             email,
             password = password,

@@ -20,7 +20,7 @@ from .models import User
 
 from .helper import (validate_login_input,validate_password,validate_username, check_if_exist)
 
-from .serializer import (UserLoginSerializer, UserSerializer, TokenSerializer)
+from .serializer import (UserLoginSerializer, UserSerializer, TokenSerializer, ImageUploadSerializer)
 
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -113,3 +113,87 @@ class UserLoginView(generics.CreateAPIView):
                 'message': 'user does not exist'
             }, status = status.HTTP_401_UNAUTHORIZED
         )
+
+
+
+        
+# {
+    
+#     "task_name": "testing2",
+#     "task_description":"testing testing testing",
+#     "created_by": "pelumi2",
+#     "owner": "pelumi2"
+# }
+
+
+class ImageUploadViewSet(APIView):
+    """
+    User Image Upload
+    """
+    permission_classes = (permissions.IsAuthenticated,)
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = ImageUploadSerializer
+    queryset = User.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        data = request.data.get('photo')
+        if data is None or data == "":
+            raise exceptions.ValidationError("Field must not be empty")
+        else:
+            user = request.user
+            user.photo = data
+            user.save()
+            serializer = ImageUploadSerializer(user)
+            return Response(data={
+                "message": "Successful Upload",
+                "data":serializer.data
+            },
+            status=status.HTTP_201_CREATED)
+
+    def get(self, request, *args, **kwargs):
+        pk=kwargs["pk"]
+        try:
+            user = self.queryset.get(pk=pk)
+            serializer = ImageUploadSerializer(user)
+            return Response(data={
+                "message": "Success",
+                "data":serializer.data
+            },
+            status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(
+                data={"message":"User object not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs["pk"]
+        data = request.data.get("photo")
+        if data is None or data == "":
+            raise exceptions.ValidationError("Field must not be empty")
+        try:
+            user = self.queryset.get(pk=pk)
+            serializer = ImageUploadSerializer()
+            updated_photo = serializer.update(user, data)
+            return Response(data={
+                "message": "Update was successful",
+                "data": ImageUploadSerializer(updated_photo).data
+            },
+            status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(
+                data={"message":"User object not found"},
+                status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request, *args, **kwargs):
+        pk=kwargs["pk"]
+        try:
+            user = self.queryset.get(pk=pk)
+            user.photo.delete(save=True)
+            return Response(data={
+                "message": "Delete successful"
+            },
+            status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response(
+                data={"message":"User object not found"},
+                status=status.HTTP_404_NOT_FOUND)
