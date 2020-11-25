@@ -22,7 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-token-auth/', obtain_jwt_token, name = 'create-token'),
     path('api/',include('users.urls')),
-    path('api/',include('flightBookingSystem.urls'))
+    path('api/',include('flightBookingSystem.urls')),
+    path('api/', include('busBookingSystem.urls'))
     # path('api/(?<version>(v1/v2)/',include('users.urls'))
 ]
 
